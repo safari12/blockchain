@@ -28,3 +28,11 @@ use Mix.Config
 # here (which is why it is important to import them last).
 #
 #     import_config "#{Mix.env()}.exs"
+
+config :blockchain, :genesis_block,
+  index: 0,
+  previous_hash: "0",
+  timestamp: 1_465_154_705,
+  data: "genesis block",
+  nonce: 35_679,
+  hash: "0000DA3553676AC53CC20564D8E956D03A08F7747823439FDE74ABF8E7EADF60"

@@ -1,18 +1,7 @@
 defmodule Blockchain do
-  @moduledoc """
-  Documentation for Blockchain.
-  """
 
-  @doc """
-  Hello world.
+  alias Blockchain.Block
 
-  ## Examples
+  defdelegate genesis_block, to: Block, as: :genesis
 
-      iex> Blockchain.hello()
-      :world
-
-  """
-  def hello do
-    :world
-  end
 end
