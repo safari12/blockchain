@@ -29,4 +29,14 @@ defmodule Blockchain.Block do
     }
   end
 
+  @spec generate_next_block(BlockData.t(), t) :: t
+  def generate_next_block(data, %Block{} = latest_block) do
+    %Block{
+      index: latest_block.index + 1,
+      previous_hash: latest_block.hash,
+      timestamp: System.system_time(:second),
+      data: data
+    }
+  end
+
 end
