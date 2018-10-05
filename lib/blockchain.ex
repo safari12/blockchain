@@ -13,6 +13,10 @@ defmodule Blockchain do
     GenServer.call(chain_pid, :latest_block)
   end
 
+  def all_blocks(chain_pid) do
+    GenServer.call(chain_pid, :all_blocks)
+  end
+
   def compute_block_hash(chain_pid, block) do
     GenServer.call(chain_pid, {:compute_block_hash, block})
   end

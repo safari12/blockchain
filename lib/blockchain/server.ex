@@ -1,7 +1,7 @@
 defmodule Blockchain.Server do
   use GenServer
 
-  alias Blockchain.{Block, Chain}
+  alias Blockchain.Chain
 
   def start_link(options) do
     GenServer.start_link(__MODULE__, options)
@@ -18,8 +18,12 @@ defmodule Blockchain.Server do
     {:reply, Chain.latest_block(state.chain), state}
   end
 
+  def handle_call(:all_blocks, _from, state) do
+    {:reply, state.chain, state}
+  end
+
   def handle_call({:compute_block_hash, block}, _from, state) do
-    {:reply, Block.Hash.compute(block, state.options[:hash_algorithm]), state}
+    {:reply, state.options[:hash_algorithm].compute(block), state}
   end
 
   def handle_call({:generate_next_block, data}, _from, state) do
@@ -43,7 +47,7 @@ defmodule Blockchain.Server do
       {:error, reason} ->
         {:reply, {:error, reason}, state}
       new_chain ->
-        {:reply, new_chain, %{state | chain: new_chain}}
+        {:reply, :ok, %{state | chain: new_chain}}
     end
   end
 
