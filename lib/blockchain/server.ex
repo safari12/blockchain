@@ -47,7 +47,7 @@ defmodule Blockchain.Server do
       {:error, reason} ->
         {:reply, {:error, reason}, state}
       new_chain ->
-        {:reply, :ok, %{state | chain: new_chain}}
+        {:reply, self(), %{state | chain: new_chain}}
     end
   end
 

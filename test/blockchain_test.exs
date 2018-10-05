@@ -14,10 +14,11 @@ defmodule BlockchainTest do
 
     test "should return the most recent block added", %{chain: chain} do
       new_block = Blockchain.generate_next_block(chain, "hello")
+      latest_block = chain
+      |> Blockchain.add_block(new_block)
+      |> Blockchain.latest_block
 
-      :ok = Blockchain.add_block(chain, new_block)
-
-      assert Blockchain.latest_block(chain) == new_block
+      assert latest_block == new_block
     end
 
   end
