@@ -5,4 +5,7 @@ defmodule Blockchain.Crypto do
   @spec hash(iodata, hash_algorithms) :: String.t()
   def hash(data, algo), do: :crypto.hash(algo, data)
 
+  def sha256_hash(data), do: hash(data, :sha256)
+  def md5_hash(data), do: hash(data, :md5)
+
 end
