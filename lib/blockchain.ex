@@ -1,9 +1,9 @@
 defmodule Blockchain do
 
-  alias Blockchain.Crypto
+  alias Blockchain.Block
 
   def new(options \\ [
-    hash_function: &Crypto.sha256_hash/1
+    hash_algorithm: Block.Hash.SHA256
   ]) do
     { :ok, pid } = Supervisor.start_child(Blockchain.Supervisor, [options])
     pid

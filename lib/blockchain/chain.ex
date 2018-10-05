@@ -5,8 +5,9 @@ defmodule Blockchain.Chain do
 
   alias Blockchain.Block
 
-  @type hash_function :: (binary() -> String.t())
-
+  @doc """
+  get most recent block that was added to chain
+  """
   @spec latest_block([Block.t()]) :: Block.t()
   def latest_block([]), do: nil
   def latest_block(chain) do
@@ -14,20 +15,23 @@ defmodule Blockchain.Chain do
     h
   end
 
-  @spec add_block([Block.t], Block.t, hash_function) :: [Block.t]
-  def add_block([], block, hash_function) do
+  @doc """
+  add block to chain if valid
+  """
+  @spec add_block([Block.t], Block.t, Block.Hash.Algorithm.t) :: [Block.t]
+  def add_block([], block, hash_algo) do
     cond do
-      validate_block_hash(block, hash_function) ->
+      validate_block_hash(block, hash_algo) ->
         {:error, :invalid_block_hash}
       true ->
         [block]
     end
   end
 
-  def add_block(chain, block, hash_function) do
+  def add_block(chain, block, hash_algo) do
     [previous_block | _] = chain
 
-    case validate_block(previous_block, block, chain, hash_function) do
+    case validate_block(previous_block, block, chain, hash_algo) do
       {:error, reason} ->
         {:error, reason}
       :ok ->
@@ -35,8 +39,15 @@ defmodule Blockchain.Chain do
     end
   end
 
-  @spec generate_next_block(BlockData.t, Block.t, hash_function) :: Block.t
-  def generate_next_block(data, nil, hash_function) do
+  @doc """
+  generate the next block candidate for chain
+  """
+  @spec generate_next_block(
+    [Block.t],
+    BlockData.t,
+    Block.Hash.Algorithm.t
+  ) :: Block.t
+  def generate_next_block([], data, hash_algo) do
     %Block{
       header: %Block.Header{
         index: 0,
@@ -46,10 +57,12 @@ defmodule Blockchain.Chain do
       },
       data: data
     }
-    |> compute_block_header_hash(hash_function)
+    |> Block.compute_and_add_hash(hash_algo)
   end
 
-  def generate_next_block(data, %Block{} = latest_block, hash_function) do
+  def generate_next_block(chain, data, hash_algo) do
+    latest_block = latest_block(chain)
+
     %Block{
       header: %Block.Header{
         index: latest_block.header.index + 1,
@@ -59,11 +72,16 @@ defmodule Blockchain.Chain do
       },
       data: data
     }
-    |> compute_block_header_hash(hash_function)
+    |> Block.compute_and_add_hash(hash_algo)
   end
 
-  @spec validate_block(Block.t(), Block.t(), [Block.t()], hash_function) :: :ok | {:error, atom()}
-  defp validate_block(previous_block, block, chain, hash_function) do
+  @spec validate_block(
+    Block.t,
+    Block.t,
+    [Block.t],
+    Block.Hash.Algorithm
+  ) :: :ok | {:error, atom()}
+  defp validate_block(previous_block, block, chain, hash_algo) do
     cond do
       previous_block.header.index + 1 != block.header.index ->
         {:error, :invalid_block_index}
@@ -71,7 +89,7 @@ defmodule Blockchain.Chain do
       previous_block.header.hash != block.header.previous_hash ->
         {:error, :invalid_block_previous_hash}
 
-      validate_block_hash(block, hash_function) ->
+      validate_block_hash(block, hash_algo) ->
         {:error, :invalid_block_hash}
 
       true ->
@@ -82,13 +100,8 @@ defmodule Blockchain.Chain do
   @spec validate_block_data(Block.t(), [Block.t()]) :: :ok | {:error, atom()}
   defp validate_block_data(%Block{data: data}, chain), do: Block.Data.verify(data, chain)
 
-  defp validate_block_hash(block, hash_function) do
-    block.header.hash != Block.Hash.compute(block, hash_function)
-  end
-
-  defp compute_block_header_hash(block, hash_function) do
-    hash = Block.Hash.compute(block, hash_function)
-    %{block | header: %{block.header | hash: hash}}
+  defp validate_block_hash(block, hash_algo) do
+    block.header.hash != hash_algo.compute(block)
   end
 
 end
