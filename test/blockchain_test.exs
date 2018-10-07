@@ -107,10 +107,30 @@ defmodule BlockchainTest do
         assert result == {:error, :invalid_block_index}
       end
 
-      defp change_block_index(block, index) do
-        %{block | header: %{block.header | index: index}}
-      end
+  end
 
+  describe "add_block should return invalid block previous hash" do
+
+    test "when block's previous hash is not the same as the previous block", %{chain: chain} do
+      Blockchain.generate_next_block(chain, "hello")
+      |> (&Blockchain.add_block(chain, &1)).()
+
+      result = Blockchain.generate_next_block(chain, "hello")
+      |> change_block_previous_hash("blah")
+      |> Block.compute_and_add_hash(Block.Hash.SHA256)
+      |> (&Blockchain.add_block(chain, &1)).()
+
+      assert result == {:error, :invalid_block_previous_hash}
+    end
+
+  end
+
+  defp change_block_index(block, index) do
+    %{block | header: %{block.header | index: index}}
+  end
+
+  defp change_block_previous_hash(block, previous_hash) do
+    %{block | header: %{block.header | previous_hash: previous_hash}}
   end
 
 end
