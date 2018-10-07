@@ -2,6 +2,8 @@ defmodule BlockchainTest do
   use ExUnit.Case, async: true
   doctest Blockchain
 
+  alias Blockchain.Block
+
   setup do
     {:ok, %{chain: Blockchain.new}}
   end
@@ -58,6 +60,27 @@ defmodule BlockchainTest do
         assert current_block.header.nonce == 0
         assert current_block.data == "hello#{index + 1}"
       end)
+    end
+
+  end
+
+  describe "compute_block_hash" do
+
+    test "by default should compute with sha256 hash", %{chain: chain} do
+      b = Blockchain.generate_next_block(chain, "hello")
+      assert Blockchain.compute_block_hash(chain, b) ==
+        Block.Hash.SHA256.compute(b)
+    end
+
+    test "should compute hash with a different hashing algorithm" do
+      chain = Blockchain.new [
+        hash_algorithm: Block.Hash.MD5
+      ]
+
+      b = Blockchain.generate_next_block(chain, "hello")
+
+      assert Blockchain.compute_block_hash(chain, b) ==
+        Block.Hash.MD5.compute(b)
     end
 
   end
