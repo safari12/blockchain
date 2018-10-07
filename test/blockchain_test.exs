@@ -38,12 +38,25 @@ defmodule BlockchainTest do
 
       blocks = Blockchain.all_blocks(chain) |> Enum.reverse
 
-      1..10
-      |> Enum.each(fn n ->
-        index = n - 1
-        b = Enum.at(blocks, index)
+      0..9
+      |> Enum.each(fn index ->
+        previous_index = index - 1
+        previous_block = Enum.at(blocks, previous_index)
+        current_block = Enum.at(blocks, index)
+        current_block_hash = Blockchain.compute_block_hash(
+          chain,
+          current_block
+        )
 
-        assert b.header.index == index
+        if previous_index >= 0 do
+          assert current_block.header.previous_hash ==
+            previous_block.header.hash
+        end
+
+        assert current_block.header.index == index
+        assert current_block.header.hash == current_block_hash
+        assert current_block.header.nonce == 0
+        assert current_block.data == "hello#{index + 1}"
       end)
     end
 
