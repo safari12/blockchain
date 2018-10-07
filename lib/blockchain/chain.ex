@@ -23,6 +23,8 @@ defmodule Blockchain.Chain do
     cond do
       validate_block_hash(block, hash_algo) ->
         {:error, :invalid_block_hash}
+      block.header.index != 0 ->
+        {:error, :invalid_block_index}
       true ->
         [block]
     end

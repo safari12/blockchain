@@ -85,4 +85,32 @@ defmodule BlockchainTest do
 
   end
 
+  describe "add_block should return invalid block index" do
+
+      test "when first block's index is not zero", %{chain: chain} do
+        b = Blockchain.generate_next_block(chain, "hello")
+        |> change_block_index(12)
+        |> Block.compute_and_add_hash(Block.Hash.SHA256)
+
+        assert Blockchain.add_block(chain, b) == {:error, :invalid_block_index}
+      end
+
+      test "when block's index is not one greater than previous block", %{chain: chain} do
+        Blockchain.generate_next_block(chain, "hello")
+        |> (&Blockchain.add_block(chain, &1)).()
+
+        result = Blockchain.generate_next_block(chain, "hello")
+        |> change_block_index(-1)
+        |> Block.compute_and_add_hash(Block.Hash.SHA256)
+        |> (&Blockchain.add_block(chain, &1)).()
+
+        assert result == {:error, :invalid_block_index}
+      end
+
+      defp change_block_index(block, index) do
+        %{block | header: %{block.header | index: index}}
+      end
+
+  end
+
 end
