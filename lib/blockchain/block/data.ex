@@ -1,4 +1,9 @@
 defprotocol Blockchain.Block.Data do
+  @moduledoc """
+  An protocol for confirming different types of data being stored in a block.
+  The data type must confirm to hash and verify functions. BitString is
+  implemented by default for this protocol
+  """
 
   @spec hash(t) :: String.t()
   def hash(data)

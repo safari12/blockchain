@@ -1,4 +1,7 @@
 defmodule Blockchain.Block.Hash.SHA256 do
+  @moduledoc """
+  Computes block's hash using SHA256
+  """
 
   alias Blockchain.Block
 

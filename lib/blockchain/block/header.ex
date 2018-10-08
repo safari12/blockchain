@@ -1,4 +1,7 @@
 defmodule Blockchain.Block.Header do
+  @moduledoc """
+  Data structure for holding block's metadata
+  """
 
   @type t :: %__MODULE__{
     index: integer,

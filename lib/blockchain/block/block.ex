@@ -1,4 +1,7 @@
 defmodule Blockchain.Block do
+  @moduledoc """
+  Data structure for holding block's header and data
+  """
 
   alias Blockchain.Block.{Header, Data, Hash}
 
