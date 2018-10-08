@@ -7,7 +7,8 @@ defmodule Blockchain.MixProject do
       version: "1.0.0",
       elixir: "~> 1.6",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      docs: docs(),
     ]
   end
 
@@ -16,6 +17,13 @@ defmodule Blockchain.MixProject do
     [
       mod: { Blockchain.Application, [] },
       extra_applications: [:logger]
+    ]
+  end
+
+  defp docs do
+    [
+      main: "Blockchain",
+      extras: ["README.md"]
     ]
   end
 
