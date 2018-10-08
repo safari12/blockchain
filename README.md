@@ -10,7 +10,9 @@
 
 ## Dependency
 
+``` elixir
 { :blockchain, github: "safari12/blockchain" }
+```
 
 ## Usage
 
@@ -50,6 +52,8 @@ hash = Blockchain.compute_block_hash(chain, block)
 
 ## Details
 
+### Creating a blockchain process
+
 Calling `Blockchain.new` returns a pid. It creates a child process
 in a dynamic supervisor; each blockchain is a process for keeping state. The pid is used
 for doing operations for the newly created blockchain by passing it in the `Blockchain` API functions.
@@ -61,3 +65,10 @@ custom module to compute the block's hash. The module must follow / implement
 callback functions for `Blockchain.Block.Hash.Algorithm` module. By default the
 library comes with `Blockchain.Block.Hash.SHA256` and `Blockchain.Block.Hash.MD5`
 modules and uses the SHA256 to compute the block's hash.
+
+### Extending Block's Data Protocol
+
+Each block has field for data in which confirms to the `Blockchain.Block.Data`
+protocol. By default the library implements BitString for the protocol, but users
+can implement their own data type for the block's data. The data type must confirm
+to the `Blockchain.Block.Data` protocol by implementing `hash` and `verify` functions.
