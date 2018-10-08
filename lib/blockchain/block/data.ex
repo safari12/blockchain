@@ -12,7 +12,7 @@ defimpl Blockchain.Block.Data, for: BitString do
 
   def hash(string) do
     string
-    |> Blockchain.Crypto.hash(:sha256)
+    |> (&:crypto.hash(:sha256, &1)).()
     |> Base.encode16
   end
 

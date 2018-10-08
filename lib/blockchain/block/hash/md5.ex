@@ -1,6 +1,6 @@
 defmodule Blockchain.Block.Hash.MD5 do
 
-  alias Blockchain.{Block, Crypto}
+  alias Blockchain.Block
 
   @behaviour Block.Hash.Algorithm
 
@@ -19,7 +19,7 @@ defmodule Blockchain.Block.Hash.MD5 do
       data: data,
   }) do
     "#{i}#{h}#{ts}#{Block.Data.hash(data)}#{n}"
-    |> Crypto.md5_hash
+    |> (&:crypto.hash(:md5, &1)).()
     |> Base.encode16
   end
 
