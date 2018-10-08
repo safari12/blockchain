@@ -68,7 +68,7 @@ modules and uses the SHA256 to compute the block's hash.
 
 ### Extending Block's Data Protocol
 
-Each block has field for data in which confirms to the `Blockchain.Block.Data`
+Each block has a field for `data` in which confirms to the `Blockchain.Block.Data`
 protocol. By default the library implements BitString for the protocol, but users
 can implement their own data type for the block's data. The data type must confirm
 to the `Blockchain.Block.Data` protocol by implementing `hash` and `verify` functions.
