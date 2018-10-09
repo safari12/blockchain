@@ -50,6 +50,14 @@ latest_block = Blockchain.latest_block(chain)
 hash = Blockchain.compute_block_hash(chain, block)
 ```
 
+### Generate \ View HTML Docs
+
+```elixir
+# Generate docs via ExDoc tool
+mix docs
+open docs/index.html
+```
+
 ## Details
 
 ### Block structure
