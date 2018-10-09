@@ -91,7 +91,7 @@ for doing operations for the newly created blockchain by passing it in the `Bloc
 Also when a user creates a new blockchain by calling `Blockchain.new`, the user can
 pass it options. The only supported option is `hash_algorithm`, in which is
 responsible for computing the block's hash. Users of library can pass in any
-custom module to compute the block's hash. The module must follow / implement
-callback functions for `Blockchain.Block.Hash.Algorithm` module. By default the
+custom module to compute the block's hash. The module must follow / implement the
+callback function `compute` for `Blockchain.Block.Hash.Algorithm` module. By default the
 library comes with `Blockchain.Block.Hash.SHA256` and `Blockchain.Block.Hash.MD5`
 modules and uses the SHA256 to compute the block's hash.
