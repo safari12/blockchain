@@ -42,27 +42,29 @@ defmodule Blockchain.Chain do
   end
 
   @doc """
-  generate the next block candidate for chain
+  generate the next block candidate for chain with data and extra metadata for
+  block's header
   """
   @spec generate_next_block(
     [Block.t],
     BlockData.t,
-    Block.Hash.Algorithm.t
+    Block.Hash.Algorithm.t,
+    Map.t
   ) :: Block.t
-  def generate_next_block([], data, hash_algo) do
+  def generate_next_block([], data, hash_algo, extra_metadata) when is_map(extra_metadata) do
     %Block{
       header: %Block.Header{
         index: 0,
         previous_hash: "0",
         timestamp: System.system_time(:second),
-        nonce: 0,
+        extra: extra_metadata
       },
       data: data
     }
     |> Block.compute_and_add_hash(hash_algo)
   end
 
-  def generate_next_block(chain, data, hash_algo) do
+  def generate_next_block(chain, data, hash_algo, extra_metadata) when is_map(extra_metadata) do
     latest_block = latest_block(chain)
 
     %Block{
@@ -70,7 +72,7 @@ defmodule Blockchain.Chain do
         index: latest_block.header.index + 1,
         previous_hash: latest_block.header.hash,
         timestamp: System.system_time(:second),
-        nonce: 0,
+        extra: extra_metadata
       },
       data: data
     }

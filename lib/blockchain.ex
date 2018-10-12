@@ -41,10 +41,11 @@ defmodule Blockchain do
   end
 
   @doc """
-  Generates the next block candidate for chain.
+  Generates the next block candidate for chain with data and extra metadata for
+  block's header
   """
-  def generate_next_block(chain_pid, data) do
-    GenServer.call(chain_pid, {:generate_next_block, data})
+  def generate_next_block(chain_pid, data, extra_metadata \\ %{}) when is_map(extra_metadata) do
+    GenServer.call(chain_pid, {:generate_next_block, data, extra_metadata})
   end
 
   @doc """

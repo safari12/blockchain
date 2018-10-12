@@ -26,13 +26,14 @@ defmodule Blockchain.Server do
     {:reply, state.options[:hash_algorithm].compute(block), state}
   end
 
-  def handle_call({:generate_next_block, data}, _from, state) do
+  def handle_call({:generate_next_block, data, extra_metadata}, _from, state) do
     {
       :reply,
       Chain.generate_next_block(
         state.chain,
         data,
-        state.options[:hash_algorithm]
+        state.options[:hash_algorithm],
+        extra_metadata
       ),
       state
     }
