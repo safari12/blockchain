@@ -41,7 +41,7 @@ block = Blockchain.generate_next_block(chain, "block's data")
 |> (&Blockchain.add_block(chain, &1)).()
 
 # get all blocks from chain
-blocks = Blockchain.latest_block(chain)
+blocks = Blockchain.all_blocks(chain)
 
 # get latest block from chain
 latest_block = Blockchain.latest_block(chain)
