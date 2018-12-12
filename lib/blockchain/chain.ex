@@ -46,7 +46,7 @@ defmodule Blockchain.Chain do
   """
   @spec generate_next_block(
     [Block.t],
-    BlockData.t,
+    Block.Data.t,
     Block.Hash.Algorithm.t
   ) :: Block.t
   def generate_next_block([], data, hash_algo) do
