@@ -1,5 +1,5 @@
 defmodule Blockchain.Server do
-  use GenServer
+  use GenServer, restart: :temporary
 
   alias Blockchain.Chain
 

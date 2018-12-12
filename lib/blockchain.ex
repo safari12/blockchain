@@ -15,7 +15,7 @@ defmodule Blockchain do
   def new(options \\ [
     hash_algorithm: Block.Hash.SHA256
   ]) do
-    { :ok, pid } = Supervisor.start_child(Blockchain.Supervisor, [options])
+    { :ok, pid } = Blockchain.Supervisor.start_child(options)
     pid
   end
 
