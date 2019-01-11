@@ -10,7 +10,12 @@ defmodule Blockchain.Supervisor do
   end
 
   def start_child(options) do
-    child_spec = {Blockchain.Server, options}
+    child_spec = %{
+      id: Blockchain.Server,
+      start: {Blockchain.Server, :start_link, [options]},
+      restart: :temporary
+    }
+
     DynamicSupervisor.start_child(__MODULE__, child_spec)
   end
 end
